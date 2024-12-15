@@ -17,16 +17,39 @@ limitations under the License.
 package controller
 
 import (
+	argoprojv1alpha1 "github.com/argoproj/argo-cd/v2/pkg/apis/application/v1alpha1"
 	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 var _ = Describe("Application Controller", func() {
 	Context("When reconciling a resource", func() {
 
 		It("should successfully reconcile the resource", func() {
+			// labelがついていないApplicationを作成
+			app := &argoprojv1alpha1.Application{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "test-app",
+					Namespace: "default",
+				},
+				Spec: argoprojv1alpha1.ApplicationSpec{
+					Destination: argoprojv1alpha1.ApplicationDestination{
+						Namespace: "test",
+					},
+				},
+			}
 
-			// TODO(user): Add more specific assertions depending on your controller's reconciliation logic.
-			// Example: If you expect a certain status condition after reconciliation, verify it here.
+			Expect(k8sClient.Create(ctx, app)).Should(Succeed())
+
+			createdApp := &argoprojv1alpha1.Application{}
+			Eventually(func() error {
+				return k8sClient.Get(ctx, client.ObjectKey{Name: "test-app", Namespace: "default"}, createdApp)
+			}).Should(Succeed())
+
+			// finalizerが設定されていないことを確認
+			Expect(createdApp.Finalizers).Should(BeEmpty())
 		})
 	})
 })
