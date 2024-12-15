@@ -1,8 +1,8 @@
 # namespace-cleaner
-// TODO(user): Add simple overview of use/purpose
+ArgoCDのApplicationの削除時に紐づくNamespaceを削除するカスタムコントローラー
 
 ## Description
-// TODO(user): An in-depth paragraph about your project and overview of use
+`namespace-cleaner.homi.run/managed: "true"`がmetadata.labelsに設定されているApplicationリソースが削除された際に紐づくNamespaceを削除する。
 
 ## Getting Started
 
@@ -86,7 +86,7 @@ its dependencies.
 Users can just run kubectl apply -f <URL for YAML BUNDLE> to install the project, i.e.:
 
 ```sh
-kubectl apply -f https://raw.githubusercontent.com/<org>/namespace-cleaner/<tag or branch>/dist/install.yaml
+kubectl apply -f https://raw.githubusercontent.com/homirun/namespace-cleaner/main/dist/install.yaml
 ```
 
 ## Contributing
